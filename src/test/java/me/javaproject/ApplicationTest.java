@@ -1,6 +1,6 @@
-package com.example;
+package me.javaproject;
 
-import com.example.model.Message;
+import me.javaproject.model.Message;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

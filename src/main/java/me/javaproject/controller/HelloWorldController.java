@@ -1,6 +1,6 @@
-package com.example.controller;
+package me.javaproject.controller;
 
-import com.example.model.Message;
+import me.javaproject.model.Message;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
