@@ -30,7 +30,7 @@ public interface GameInterface {
     String getCurrentPlayer();
 
     // Method to generate return JSON
-    ArrayNode generateJSON();
+    ArrayNode generateJSON(int aiMovedTo);
 
     // Method to switch the current player
     void switchPlayer();

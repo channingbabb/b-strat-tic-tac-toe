@@ -82,7 +82,7 @@ public class Game implements GameInterface {
     }
 
     @Override
-    public ArrayNode generateJSON() {
+    public ArrayNode generateJSON(int aiMovedTo) {
         ObjectMapper objectMapper = new ObjectMapper();
         ArrayNode cellsNode = objectMapper.createArrayNode();
 
@@ -96,7 +96,10 @@ public class Game implements GameInterface {
         }
 
         ArrayNode rootNode = objectMapper.createArrayNode();
+        ObjectNode aiMovedToNode = objectMapper.createObjectNode();
+        aiMovedToNode.put("aiMovedTo", aiMovedTo);
         rootNode.add(cellsNode);
+        rootNode.add(aiMovedToNode);
 
         return rootNode;
     }

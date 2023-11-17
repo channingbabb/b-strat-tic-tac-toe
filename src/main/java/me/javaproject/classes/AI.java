@@ -46,7 +46,13 @@ public class AI implements AIInterface {
 
     @Override
     public int chooseBestMove(Game game, Board board, int[] possibleMoves) {
-        Cell[] playersCells = board.getCellsFromPlayer(AI_SYMBOL);
+        while (board.isBoardFull()) {
+            // generate random char between 0 and 8
+            Random random = new Random();
+            int randomInt = random.nextInt(9);
+            board = game.getBoard(randomInt);
+        }
+        Cell[] playersCells = board.getCells();
         if (playersCells.length == 0) {
             // If the AI has no moves, choose a random move
             Random random = new Random();

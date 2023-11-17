@@ -56,7 +56,7 @@ public class TicTacToeController {
         AI ai = new AI(game);
         int nextMove = ai.chooseNextMove(game.getNextMoveCell());
         game.makeMove(game.getNextMoveCell(), nextMove, "O");
-        String result = game.generateJSON().toString();
+        String result = game.generateJSON(nextMove).toString();
         // String result = "Hello World";
 
         // Return the result
