@@ -52,7 +52,7 @@ public class TicTacToeController {
     public String processMove(@RequestBody String requestBody) throws IOException {
         // Create Game instance with boards and next move information
         Game game = this.parseGame(requestBody);
-
+        game.makeMove(game.getNextMoveBoard(), game.getNextMoveCell(), "X");
         AI ai = new AI(game);
         int nextMove = ai.chooseNextMove(game.getNextMoveCell());
         game.makeMove(game.getNextMoveCell(), nextMove, "O");
