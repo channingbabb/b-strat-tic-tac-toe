@@ -1,84 +1,100 @@
 package me.javaproject.classes;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import me.javaproject.interfaces.BoardInterface;
+import me.javaproject.interfaces.CellInterface;
 
-/**
- * Board looks like:
- * {
- *     "0": "X",
- *     "1": "null",
- *     "2": "null",
- *     "3": "null",
- *     "4": "null",
- *     "5": "null",
- *     "6": "null",
- *     "7": "null",
- *     "8": "O"
- * }
- */
-public class Board {
-    JsonNode board;
-    public Board(JsonNode board) {
-        this.board = board;
-        System.out.println(board);
+public class Board implements BoardInterface {
+
+    private Cell[] cells; // Array of cells
+
+    // Constructor
+    public Board(Cell[] cells) {
+        if (cells.length != 9) {
+            throw new IllegalArgumentException("A board must be initialized with 9 cells");
+        }
+        this.cells = cells;
     }
 
-    public boolean isValidMove(int cell) {
-        JsonNode cellValue = this.board.get(String.valueOf(cell));
-        return cellValue != null && "null".equals(cellValue.asText());
+    @Override
+    public boolean makeMove(int cellIndex, String playerSymbol) {
+        if (isValidMove(cellIndex)) {
+            cells[cellIndex].setSymbol(playerSymbol);
+            return true;
+        }
+        return false;
     }
 
-    public void makeMove(int cell, String player) {
-        ((ObjectNode) this.board).put(String.valueOf(cell), player);
+    @Override
+    public String checkWinner() {
+        // Implement logic to check for winner in the board
+        return null; // Placeholder
     }
 
-    public void undoMove(int cell) {
-        ((ObjectNode) this.board).put(String.valueOf(cell), "null");
+    @Override
+    public String[] getBoardState() {
+        String[] state = new String[9];
+        for (int i = 0; i < cells.length; i++) {
+            state[i] = cells[i].getSymbol();
+        }
+        return state;
     }
 
-    public int getScore() {
-        // Check rows
-        for (int i = 0; i < 9; i += 3) {
-            if (this.board.get(i) != null && this.board.get(i) == this.board.get(i + 1) && this.board.get(i) == this.board.get(i + 2)) {
-                if (this.board.get(i).asText().equals("X")) {
-                    return 1;
-                } else if (this.board.get(i).asText().equals("O")) {
-                    return -1;
-                }
+    @Override
+    public boolean isValidMove(int cellIndex) {
+        return cellIndex >= 0 && cellIndex < 9 && cells[cellIndex].isEmpty();
+    }
+
+    @Override
+    public Cell[] getCells() {
+        return cells;
+    }
+
+    @Override
+    public Cell[] getOpenCells() {
+        int openCellCount = 0;
+        for (Cell cell : cells) {
+            if (cell.isEmpty()) {
+                openCellCount++;
             }
         }
-
-        // Check columns
-        for (int i = 0; i < 3; i++) {
-            if (this.board.get(i) != null && this.board.get(i).asText().equals("X") && this.board.get(i) == this.board.get(i + 3) && this.board.get(i) == this.board.get(i + 6)) {
-                return 1;
-            } else if (this.board.get(i) != null && this.board.get(i).asText().equals("O") && this.board.get(i) == this.board.get(i + 3) && this.board.get(i) == this.board.get(i + 6)) {
-                return -1;
+        Cell[] openCells = new Cell[openCellCount];
+        int openCellIndex = 0;
+        for (Cell cell : cells) {
+            if (cell.isEmpty()) {
+                openCells[openCellIndex] = cell;
+                openCellIndex++;
             }
         }
-
-        // Check diagonals
-        if (this.board.get(0) != null && this.board.get(0).asText().equals("X") && this.board.get(0) == this.board.get(4) && this.board.get(0) == this.board.get(8)) {
-            return 1;
-        } else if (this.board.get(0) != null && this.board.get(0).asText().equals("O") && this.board.get(0) == this.board.get(4) && this.board.get(0) == this.board.get(8)) {
-            return -1;
-        }
-
-        if (this.board.get(2) != null && this.board.get(2).asText().equals("X") && this.board.get(2) == this.board.get(4) && this.board.get(2) == this.board.get(6)) {
-            return 1;
-        } else if (this.board.get(2) != null && this.board.get(2).asText().equals("O") && this.board.get(2) == this.board.get(4) && this.board.get(2) == this.board.get(6)) {
-            return -1;
-        }
-
-        // No winner
-        return 0;
+        return openCells;
     }
 
-    public boolean isGameOver() {
-        return getScore() != 0;
+    @Override
+    public Cell[] getCellsFromPlayer(String playerSymbol) {
+        int playerCellCount = 0;
+        for (Cell cell : cells) {
+            if (cell.getSymbol().equals(playerSymbol)) {
+                playerCellCount++;
+            }
+        }
+        Cell[] playerCells = new Cell[playerCellCount];
+        int playerCellIndex = 0;
+        for (Cell cell : cells) {
+            if (cell.getSymbol().equals(playerSymbol)) {
+                playerCells[playerCellIndex] = cell;
+                playerCellIndex++;
+            }
+        }
+        return playerCells;
     }
 
-
+    @Override
+    public boolean isBoardFull() {
+        for (CellInterface cell : cells) {
+            if (cell.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

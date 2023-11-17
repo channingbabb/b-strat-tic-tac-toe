@@ -1,87 +1,99 @@
 package me.javaproject.classes;
 
-public class AI {
-    private Board board;
+import me.javaproject.interfaces.AIInterface;
+import java.util.Random;
 
-    public AI(Board board) {
-        this.board = board;
+public class AI implements AIInterface {
+    final private String AI_SYMBOL = "O";
+    Game game;
+
+    public AI(Game game) {
+        this.game = game;
     }
 
-    public int pickNextMove() {
-        int bestScore = Integer.MIN_VALUE;
-        int bestMove = -1;
-
-        // Loop through all possible moves
-        for (int i = 0; i < 9; i++) {
-            if (board.isValidMove(i)) {
-                // Make the move for AI (assuming AI is 'O')
-                board.makeMove(i, "O");
-
-                // Evaluate the move using minimax and alpha-beta pruning
-                int score = minimax(0, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
-
-                // Undo the move for backtracking
-                board.undoMove(i);
-
-                // If the current move is better than the best found so far, update the best score and move
-                if (score > bestScore) {
-                    bestScore = score;
-                    bestMove = i;
-                }
-            }
+    @Override
+    public int chooseNextMove(int nextMoveBoard) {
+        Board board = game.getBoard(nextMoveBoard);
+        Cell[] cells = generatePossibleMoves(board);
+        int[] possibleMoves = new int[cells.length];
+        for (int i = 0; i < cells.length; i++) {
+            possibleMoves[i] = cells[i].getPosition();
         }
-
-        return bestMove; // Return the best move found
+        int bestMove = chooseBestMove(game, board, possibleMoves);
+        return bestMove;
     }
 
-    private int minimax(int depth, int alpha, int beta, boolean isMaximizingPlayer) {
-        // Base case: check for endgame or depth limit
-        if (board.isGameOver() || depth == 3) {
-            return board.getScore(); // Use a scoring function to evaluate board state
+    @Override
+    public int evaluateGame() {
+        // This is STRATEGIC tic tac toe.  This means that there are 9 boards, and 9 cells in each board.
+        //
+        // The board is represented as a 1D array of 9 boards, each containing 9 cells.  The board is indexed
+        throw new UnsupportedOperationException("Unimplemented method 'evaluateGame'");
+    }
+
+    @Override
+    public int applyStrategy(int nextMoveBoard) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'applyStrategy'");
+    }
+
+    @Override
+    public Cell[] generatePossibleMoves(Board board) {
+        Cell[] cells = board.getOpenCells();
+        return cells;
+
+    }
+
+    @Override
+    public int chooseBestMove(Game game, Board board, int[] possibleMoves) {
+        Cell[] playersCells = board.getCellsFromPlayer(AI_SYMBOL);
+        if (playersCells.length == 0) {
+            // If the AI has no moves, choose a random move
+            Random random = new Random();
+            return possibleMoves[random.nextInt(possibleMoves.length)];
+        }
+        // Check for horizontal wins
+        for (int i = 0; i < 3; i++) {
+            int rowStart = i * 3;
+            if (playersCells[rowStart] != null && playersCells[rowStart].getSymbol().equals(AI_SYMBOL) &&
+                    playersCells[rowStart + 1] != null && playersCells[rowStart + 1].getSymbol().equals(AI_SYMBOL) &&
+                    playersCells[rowStart + 2] != null && playersCells[rowStart + 2].getSymbol().equals(AI_SYMBOL)) {
+                return rowStart + 1; // Return the middle cell of the winning row
+            }
         }
 
-        if (isMaximizingPlayer) {
-            int maxEval = Integer.MIN_VALUE;
-
-            // Explore all valid moves for 'O'
-            for (int i = 0; i < 9; i++) {
-                if (board.isValidMove(i)) {
-                    board.makeMove(i, "O");
-                    int eval = minimax(depth + 1, alpha, beta, false);
-                    board.undoMove(i);
-
-                    maxEval = Math.max(maxEval, eval);
-                    alpha = Math.max(alpha, eval);
-
-                    // Alpha-beta pruning
-                    if (beta <= alpha) {
-                        break;
-                    }
-                }
+        // Check for vertical wins
+        for (int i = 0; i < 3; i++) {
+            int colStart = i;
+            if (playersCells[colStart] != null && playersCells[colStart].getSymbol().equals(AI_SYMBOL) &&
+                    playersCells[colStart + 3] != null && playersCells[colStart + 3].getSymbol().equals(AI_SYMBOL) &&
+                    playersCells[colStart + 6] != null && playersCells[colStart + 6].getSymbol().equals(AI_SYMBOL)) {
+                return colStart + 3; // Return the middle cell of the winning column
             }
-
-            return maxEval;
-        } else {
-            int minEval = Integer.MAX_VALUE;
-
-            // Explore all valid moves for 'X'
-            for (int i = 0; i < 9; i++) {
-                if (board.isValidMove(i)) {
-                    board.makeMove(i, "X");
-                    int eval = minimax(depth + 1, alpha, beta, true);
-                    board.undoMove(i);
-
-                    minEval = Math.min(minEval, eval);
-                    beta = Math.min(beta, eval);
-
-                    // Alpha-beta pruning
-                    if (beta <= alpha) {
-                        break;
-                    }
-                }
-            }
-
-            return minEval;
         }
+
+        // Check for diagonal wins
+        if (playersCells[0] != null && playersCells[0].getSymbol().equals(AI_SYMBOL) &&
+                playersCells[4] != null && playersCells[4].getSymbol().equals(AI_SYMBOL) &&
+                playersCells[8] != null && playersCells[8].getSymbol().equals(AI_SYMBOL)) {
+            return 4; // Return the center cell of the diagonal win
+        }
+
+        if (playersCells[2] != null && playersCells[2].getSymbol().equals(AI_SYMBOL) &&
+                playersCells[4] != null && playersCells[4].getSymbol().equals(AI_SYMBOL) &&
+                playersCells[6] != null && playersCells[6].getSymbol().equals(AI_SYMBOL)) {
+            return 4; // Return the center cell of the diagonal win
+        }
+
+        // If no winning moves are found, choose a random available move
+        Random random = new Random();
+        return possibleMoves[random.nextInt(possibleMoves.length)];
+    }
+
+
+    @Override
+    public void cleanup() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'cleanup'");
     }
 }
