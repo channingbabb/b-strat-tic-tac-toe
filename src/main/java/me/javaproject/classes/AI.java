@@ -18,10 +18,15 @@ public class AI implements AIInterface {
         Board board = game.getBoard(nextMoveBoard);
 
         // Check if the selected board is already won or full. If so, find a new board.
-        if (board.isWon() || board.isBoardFull()) {
+        do {
             nextMoveBoard = findPlayableBoard();
             board = game.getBoard(nextMoveBoard); // Update the board reference
-        }
+        } while (board.isWon() || board.isBoardFull());
+
+//        if (board.isWon() || board.isBoardFull()) {
+//            nextMoveBoard = findPlayableBoard();
+//            board = game.getBoard(nextMoveBoard); // Update the board reference
+//        }
 
         // Now that we have a valid board, generate possible moves
         Cell[] cells = generatePossibleMoves(board);
@@ -56,9 +61,6 @@ public class AI implements AIInterface {
     }
     @Override
     public int evaluateGame() {
-        // This is STRATEGIC tic tac toe.  This means that there are 9 boards, and 9 cells in each board.
-        //
-        // The board is represented as a 1D array of 9 boards, each containing 9 cells.  The board is indexed
         throw new UnsupportedOperationException("Unimplemented method 'evaluateGame'");
     }
 
