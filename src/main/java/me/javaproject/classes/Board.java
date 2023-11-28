@@ -25,10 +25,40 @@ public class Board implements BoardInterface {
         return false;
     }
 
+    // naya - adding logic to check the winner of the board
     @Override
     public String checkWinner() {
-        // Implement logic to check for winner in the board
-        return null; // Placeholder
+        // Check rows
+        for (int row = 0; row < 9; row += 3) {
+            if (!cells[row].isEmpty() &&
+                    cells[row].getSymbol().equals(cells[row + 1].getSymbol()) &&
+                    cells[row].getSymbol().equals(cells[row + 2].getSymbol())) {
+                return cells[row].getSymbol();
+            }
+        }
+
+        // Check columns
+        for (int col = 0; col < 3; col++) {
+            if (!cells[col].isEmpty() &&
+                    cells[col].getSymbol().equals(cells[col + 3].getSymbol()) &&
+                    cells[col].getSymbol().equals(cells[col + 6].getSymbol())) {
+                return cells[col].getSymbol();
+            }
+        }
+
+        // Check diagonals
+        if (!cells[4].isEmpty()) {
+            if (cells[0].getSymbol().equals(cells[4].getSymbol()) &&
+                    cells[0].getSymbol().equals(cells[8].getSymbol())) {
+                return cells[0].getSymbol();
+            }
+            if (cells[2].getSymbol().equals(cells[4].getSymbol()) &&
+                    cells[2].getSymbol().equals(cells[6].getSymbol())) {
+                return cells[2].getSymbol();
+            }
+        }
+
+        return null; // if there is no winner found
     }
 
     @Override

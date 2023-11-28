@@ -11,8 +11,10 @@ public class AI implements AIInterface {
         this.game = game;
     }
 
+    // modify this to check if board is already won or not
     @Override
     public int chooseNextMove(int nextMoveBoard) {
+
         Board board = game.getBoard(nextMoveBoard);
         Cell[] cells = generatePossibleMoves(board);
         int[] possibleMoves = new int[cells.length];
@@ -44,6 +46,7 @@ public class AI implements AIInterface {
 
     }
 
+    // modify this to check if a board is already won
     @Override
     public int chooseBestMove(Game game, Board board, int[] possibleMoves) {
         while (board.isBoardFull()) {
