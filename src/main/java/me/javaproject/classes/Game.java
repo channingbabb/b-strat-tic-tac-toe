@@ -61,7 +61,7 @@ public class Game implements GameInterface {
 
     @Override
     public String[][] getBoardState(int boardIndex) {
-        return new String[][] { boards[boardIndex].getBoardState() };
+        return new String[][]{boards[boardIndex].getBoardState()};
     }
 
     @Override
@@ -90,7 +90,7 @@ public class Game implements GameInterface {
             ObjectNode boardObjectNode = objectMapper.createObjectNode(); // Create an object node for the board
             for (int i = 0; i < board.getCells().length; i++) {
                 boardObjectNode.put(String.valueOf(i), board.getCells()[i].getSymbol()); // Add the cell to the board
-                                                                                         // object node
+                // object node
             }
             cellsNode.add(boardObjectNode); // Add the board object node to the cells node
         }
@@ -107,5 +107,9 @@ public class Game implements GameInterface {
     @Override
     public void switchPlayer() {
         currentPlayer = currentPlayer.equals("X") ? "O" : "X";
+    }
+
+    public Board[] getBoards() {
+        return boards;
     }
 }

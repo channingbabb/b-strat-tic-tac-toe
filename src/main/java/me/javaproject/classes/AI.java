@@ -16,15 +16,44 @@ public class AI implements AIInterface {
     public int chooseNextMove(int nextMoveBoard) {
 
         Board board = game.getBoard(nextMoveBoard);
+
+        // Check if the selected board is already won or full. If so, find a new board.
+        if (board.isWon() || board.isBoardFull()) {
+            nextMoveBoard = findPlayableBoard();
+            board = game.getBoard(nextMoveBoard); // Update the board reference
+        }
+
+        // Now that we have a valid board, generate possible moves
         Cell[] cells = generatePossibleMoves(board);
         int[] possibleMoves = new int[cells.length];
         for (int i = 0; i < cells.length; i++) {
             possibleMoves[i] = cells[i].getPosition();
         }
+
+        // Choose the best move from the possible moves
         int bestMove = chooseBestMove(game, board, possibleMoves);
         return bestMove;
+
+       // Board board = game.getBoard(nextMoveBoard);
+       // Cell[] cells = generatePossibleMoves(board);
+       // int[] possibleMoves = new int[cells.length];
+       // for (int i = 0; i < cells.length; i++) {
+        //    possibleMoves[i] = cells[i].getPosition();
+        //}
+       // int bestMove = chooseBestMove(game, board, possibleMoves);
+        //return bestMove;
     }
 
+    // naya added this
+    private int findPlayableBoard() {
+        for (int i = 0; i < game.getBoards().length; i++) {
+            Board board = game.getBoard(i);
+            if (!board.isWon() && !board.isBoardFull()) {
+                return i; // Return index of a playable board
+            }
+        }
+        throw new IllegalStateException("No playable boards available");
+    }
     @Override
     public int evaluateGame() {
         // This is STRATEGIC tic tac toe.  This means that there are 9 boards, and 9 cells in each board.

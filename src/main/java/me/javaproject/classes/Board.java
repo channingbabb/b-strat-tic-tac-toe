@@ -61,6 +61,13 @@ public class Board implements BoardInterface {
         return null; // if there is no winner found
     }
 
+    // naya just added this
+    public boolean isWon() {
+        // Implement the logic to check if a winner exists
+        String winner = checkWinner();
+        return winner != null && !winner.isEmpty();
+    }
+
     @Override
     public String[] getBoardState() {
         String[] state = new String[9];
