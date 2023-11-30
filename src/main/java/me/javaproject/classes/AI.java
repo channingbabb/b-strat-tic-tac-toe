@@ -15,38 +15,34 @@ public class AI implements AIInterface {
     @Override
     public int chooseNextMove(int nextMoveBoard) {
 
-        Board board = game.getBoard(nextMoveBoard);
-
-        // Check if the selected board is already won or full. If so, find a new board.
-        do {
-            nextMoveBoard = findPlayableBoard();
-            board = game.getBoard(nextMoveBoard); // Update the board reference
-        } while (board.isWon() || board.isBoardFull());
-
-//        if (board.isWon() || board.isBoardFull()) {
-//            nextMoveBoard = findPlayableBoard();
-//            board = game.getBoard(nextMoveBoard); // Update the board reference
+//        Board board = game.getBoard(nextMoveBoard);
+//
+//        // Check if the selected board is already won or full. If so, find a new board.
+//
+//
+//        // Now that we have a valid board, generate possible moves
+//        Cell[] cells = generatePossibleMoves(board);
+//        int[] possibleMoves = new int[cells.length];
+//        for (int i = 0; i < cells.length; i++) {
+//            possibleMoves[i] = cells[i].getPosition();
 //        }
+//
+//        // Choose the best move from the possible moves
+//        int bestMove = chooseBestMove(game, board, possibleMoves);
+//        return bestMove;
 
-        // Now that we have a valid board, generate possible moves
+        Board board = game.getBoard(nextMoveBoard);
+        while (board.isWon() || board.isBoardFull()) {
+            nextMoveBoard = this.findPlayableBoard();
+            board = game.getBoard(nextMoveBoard); // Update the board reference
+        }
         Cell[] cells = generatePossibleMoves(board);
         int[] possibleMoves = new int[cells.length];
         for (int i = 0; i < cells.length; i++) {
             possibleMoves[i] = cells[i].getPosition();
         }
-
-        // Choose the best move from the possible moves
         int bestMove = chooseBestMove(game, board, possibleMoves);
         return bestMove;
-
-       // Board board = game.getBoard(nextMoveBoard);
-       // Cell[] cells = generatePossibleMoves(board);
-       // int[] possibleMoves = new int[cells.length];
-       // for (int i = 0; i < cells.length; i++) {
-        //    possibleMoves[i] = cells[i].getPosition();
-        //}
-       // int bestMove = chooseBestMove(game, board, possibleMoves);
-        //return bestMove;
     }
 
     // naya added this
@@ -66,7 +62,6 @@ public class AI implements AIInterface {
 
     @Override
     public int applyStrategy(int nextMoveBoard) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'applyStrategy'");
     }
 
@@ -133,7 +128,6 @@ public class AI implements AIInterface {
 
     @Override
     public void cleanup() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'cleanup'");
     }
 }

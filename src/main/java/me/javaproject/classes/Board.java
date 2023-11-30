@@ -58,15 +58,21 @@ public class Board implements BoardInterface {
             }
         }
 
-        return null; // if there is no winner found
+        return "null"; // if there is no winner found
     }
 
     // naya just added this
     public boolean isWon() {
         // Implement the logic to check if a winner exists
         String winner = checkWinner();
-        return winner != null && !winner.isEmpty();
+        return winner != "null" && !winner.isEmpty();
     }
+
+    // get winner
+    public String getWinner() {
+        return checkWinner();
+    }
+
 
     @Override
     public String[] getBoardState() {
@@ -129,6 +135,15 @@ public class Board implements BoardInterface {
     public boolean isBoardFull() {
         for (CellInterface cell : cells) {
             if (cell.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isEmpty() {
+        for (CellInterface cell : cells) {
+            if (!cell.isEmpty()) {
                 return false;
             }
         }
