@@ -92,42 +92,72 @@ public class AI implements AIInterface {
             Random random = new Random();
             return possibleMoves[random.nextInt(possibleMoves.length)];
         }
-        // Check for horizontal wins
-        for (int i = 0; i < 3; i++) {
+
+        // check for a horizontal win
+        for(int i = 0; i < 3; i++){
             int rowStart = i * 3;
+
+            // check for a board winning move to the left
+            if (playersCells[rowStart] == null &&
+                    playersCells[rowStart + 1] == null && playersCells[rowStart].getSymbol().equals(AI_SYMBOL) &&
+                    playersCells[rowStart + 2] != null && playersCells[rowStart].getSymbol().equals(AI_SYMBOL)) {
+                return possibleMoves[rowStart];
+            }
+
+            // check for a board winning move in the middle
             if (playersCells[rowStart] != null && playersCells[rowStart].getSymbol().equals(AI_SYMBOL) &&
-                    playersCells[rowStart + 1] != null && playersCells[rowStart + 1].getSymbol().equals(AI_SYMBOL) &&
-                    playersCells[rowStart + 2] != null && playersCells[rowStart + 2].getSymbol().equals(AI_SYMBOL)) {
-                return rowStart + 1; // Return the middle cell of the winning row
+                    playersCells[rowStart + 1] == null &&
+                    playersCells[rowStart + 2] != null && playersCells[rowStart].getSymbol().equals(AI_SYMBOL)) {
+                return possibleMoves[rowStart + 1];
+            }
+
+
+            // check for a board winning move to the right
+            if (playersCells[rowStart] != null && playersCells[rowStart].getSymbol().equals(AI_SYMBOL) &&
+                    playersCells[rowStart + 1] != null && playersCells[rowStart].getSymbol().equals(AI_SYMBOL) &&
+                    playersCells[rowStart + 2] == null) {
+                return possibleMoves[rowStart + 2];
             }
         }
+
+//        // Check for horizontal wins
+//        for (int i = 0; i < 3; i++) {
+//            int rowStart = i * 3;
+//            if (playersCells[rowStart] != null && playersCells[rowStart].getSymbol().equals(AI_SYMBOL) &&
+//                    playersCells[rowStart + 1] != null && playersCells[rowStart + 1].getSymbol().equals(AI_SYMBOL) &&
+//                    playersCells[rowStart + 2] != null && playersCells[rowStart + 2].getSymbol().equals(AI_SYMBOL)) {
+//                return rowStart + 1; // Return the middle cell of the winning row
+//            }
+//        }
 
         // Check for vertical wins
-        for (int i = 0; i < 3; i++) {
-            int colStart = i;
-            if (playersCells[colStart] != null && playersCells[colStart].getSymbol().equals(AI_SYMBOL) &&
-                    playersCells[colStart + 3] != null && playersCells[colStart + 3].getSymbol().equals(AI_SYMBOL) &&
-                    playersCells[colStart + 6] != null && playersCells[colStart + 6].getSymbol().equals(AI_SYMBOL)) {
-                return colStart + 3; // Return the middle cell of the winning column
-            }
-        }
+//        for (int i = 0; i < 3; i++) {
+//            int colStart = i;
+//            if (playersCells[colStart] != null && playersCells[colStart].getSymbol().equals(AI_SYMBOL) &&
+//                    playersCells[colStart + 3] != null && playersCells[colStart + 3].getSymbol().equals(AI_SYMBOL) &&
+//                    playersCells[colStart + 6] != null && playersCells[colStart + 6].getSymbol().equals(AI_SYMBOL)) {
+//                return colStart + 3; // Return the middle cell of the winning column
+//            }
+//        }
 
         // Check for diagonal wins
-        if (playersCells[0] != null && playersCells[0].getSymbol().equals(AI_SYMBOL) &&
-                playersCells[4] != null && playersCells[4].getSymbol().equals(AI_SYMBOL) &&
-                playersCells[8] != null && playersCells[8].getSymbol().equals(AI_SYMBOL)) {
-            return 4; // Return the center cell of the diagonal win
-        }
+//        if (playersCells[0] != null && playersCells[0].getSymbol().equals(AI_SYMBOL) &&
+//                playersCells[4] != null && playersCells[4].getSymbol().equals(AI_SYMBOL) &&
+//                playersCells[8] != null && playersCells[8].getSymbol().equals(AI_SYMBOL)) {
+//            return 4; // Return the center cell of the diagonal win
+//        }
+//
+//        if (playersCells[2] != null && playersCells[2].getSymbol().equals(AI_SYMBOL) &&
+//                playersCells[4] != null && playersCells[4].getSymbol().equals(AI_SYMBOL) &&
+//                playersCells[6] != null && playersCells[6].getSymbol().equals(AI_SYMBOL)) {
+//            return 4; // Return the center cell of the diagonal win
+//        }
 
-        if (playersCells[2] != null && playersCells[2].getSymbol().equals(AI_SYMBOL) &&
-                playersCells[4] != null && playersCells[4].getSymbol().equals(AI_SYMBOL) &&
-                playersCells[6] != null && playersCells[6].getSymbol().equals(AI_SYMBOL)) {
-            return 4; // Return the center cell of the diagonal win
-        }
 
         // If no winning moves are found, choose a random available move
         Random random = new Random();
         return possibleMoves[random.nextInt(possibleMoves.length)];
+
     }
 
 
