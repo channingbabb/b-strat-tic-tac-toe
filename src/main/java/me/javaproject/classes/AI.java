@@ -72,7 +72,6 @@ public class AI implements AIInterface {
 
     }
 
-    // modify this to check if a board is already won
     @Override
     public int chooseBestMove(Game game, Board board, int[] possibleMoves) {
         while (board.isBoardFull()) {
@@ -94,7 +93,7 @@ public class AI implements AIInterface {
 
             // check for a board winning move to the left
             if (playersCells[rowStart] == null &&
-                    playersCells[rowStart + 1] == null && playersCells[rowStart].getSymbol().equals(AI_SYMBOL) &&
+                    playersCells[rowStart + 1] != null && playersCells[rowStart].getSymbol().equals(AI_SYMBOL) &&
                     playersCells[rowStart + 2] != null && playersCells[rowStart].getSymbol().equals(AI_SYMBOL)) {
                 return possibleMoves[rowStart];
             }
