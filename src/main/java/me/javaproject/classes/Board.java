@@ -28,36 +28,27 @@ public class Board implements BoardInterface {
     // naya - adding logic to check the winner of the board
     @Override
     public String checkWinner() {
-        // Check rows
-        for (int row = 0; row < 9; row += 3) {
-            if (!cells[row].isEmpty() &&
-                    cells[row].getSymbol().equals(cells[row + 1].getSymbol()) &&
-                    cells[row].getSymbol().equals(cells[row + 2].getSymbol())) {
-                return cells[row].getSymbol();
+
+        // array of array of winning moves
+        int[][] winningMoves = new int[][] {
+                {0, 1, 2}, // top row
+                {3, 4, 5}, // middle row
+                {6, 7, 8}, // bottom row
+                {0, 3, 6}, // left column
+                {1, 4, 7}, // middle column
+                {2, 5, 8}, // right column
+                {0, 4, 8}, // top left to bottom right diagonal
+                {2, 4, 6} // top right to bottom left diagonal
+        };
+        // check if there is a winner
+        for (int[] winningMove : winningMoves) {
+            String firstCell = cells[winningMove[0]].getSymbol();
+            String secondCell = cells[winningMove[1]].getSymbol();
+            String thirdCell = cells[winningMove[2]].getSymbol();
+            if (!firstCell.equals("null") && firstCell.equals(secondCell) && firstCell.equals(thirdCell)) {
+                return firstCell;
             }
         }
-
-        // Check columns
-        for (int col = 0; col < 3; col++) {
-            if (!cells[col].isEmpty() &&
-                    cells[col].getSymbol().equals(cells[col + 3].getSymbol()) &&
-                    cells[col].getSymbol().equals(cells[col + 6].getSymbol())) {
-                return cells[col].getSymbol();
-            }
-        }
-
-        // Check diagonals
-        if (!cells[4].isEmpty()) {
-            if (cells[0].getSymbol().equals(cells[4].getSymbol()) &&
-                    cells[0].getSymbol().equals(cells[8].getSymbol())) {
-                return cells[0].getSymbol();
-            }
-            if (cells[2].getSymbol().equals(cells[4].getSymbol()) &&
-                    cells[2].getSymbol().equals(cells[6].getSymbol())) {
-                return cells[2].getSymbol();
-            }
-        }
-
         return "null"; // if there is no winner found
     }
 

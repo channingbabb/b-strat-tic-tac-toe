@@ -60,36 +60,26 @@ public class Game implements GameInterface {
 
     @Override
     public String checkOverallWinner() {
-
-        for (int row = 0; row < 9; row += 3) {
-            if (!boards[row].isEmpty() &&
-                    boards[row].getWinner().equals(boards[row + 1].getWinner()) &&
-                    boards[row].getWinner().equals(boards[row + 2].getWinner())) {
-                return boards[row].getWinner();
+        // array of array of winning moves
+        int[][] winningMoves = new int[][] {
+                {0, 1, 2}, // top row
+                {3, 4, 5}, // middle row
+                {6, 7, 8}, // bottom row
+                {0, 3, 6}, // left column
+                {1, 4, 7}, // middle column
+                {2, 5, 8}, // right column
+                {0, 4, 8}, // top left to bottom right diagonal
+                {2, 4, 6} // top right to bottom left diagonal
+        };
+        // check if there is a winner
+        for (int[] winningMove : winningMoves) {
+            String firstBoard = boards[winningMove[0]].getWinner();
+            String secondBoard = boards[winningMove[1]].getWinner();
+            String thirdBoard = boards[winningMove[2]].getWinner();
+            if (!firstBoard.equals("null") && firstBoard.equals(secondBoard) && firstBoard.equals(thirdBoard)) {
+                return firstBoard;
             }
         }
-
-        // Check columns
-        for (int col = 0; col < 3; col++) {
-            if (!boards[col].isEmpty() &&
-                    boards[col].getWinner().equals(boards[col + 3].getWinner()) &&
-                    boards[col].getWinner().equals(boards[col + 6].getWinner())) {
-                return boards[col].getWinner();
-            }
-        }
-
-        // Check diagonals
-        if (!boards[4].isEmpty()) {
-            if (boards[0].getWinner().equals(boards[4].getWinner()) &&
-                    boards[0].getWinner().equals(boards[8].getWinner())) {
-                return boards[0].getWinner();
-            }
-            if (boards[2].getWinner().equals(boards[4].getWinner()) &&
-                    boards[2].getWinner().equals(boards[6].getWinner())) {
-                return boards[2].getWinner();
-            }
-        }
-
         return "null"; // if there is no winner found
     }
 
@@ -142,7 +132,7 @@ public class Game implements GameInterface {
         ObjectNode gameWon = objectMapper.createObjectNode();
         aiMovedToNode.put("aiMovedTo", aiMovedTo);
         boardsWon.put("boardsWon", Arrays.toString(boardsWonArr));
-        gameWon.put("gameWon", this.gameWonBy);
+        gameWon.put("gameWon", this.checkOverallWinner());
         rootNode.add(cellsNode);
         rootNode.add(aiMovedToNode);
         rootNode.add(boardsWon);
