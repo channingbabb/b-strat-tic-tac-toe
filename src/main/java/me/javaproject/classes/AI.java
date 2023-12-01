@@ -14,23 +14,6 @@ public class AI implements AIInterface {
     // modify this to check if board is already won or not
     @Override
     public int chooseNextMove(int nextMoveBoard) {
-
-//        Board board = game.getBoard(nextMoveBoard);
-//
-//        // Check if the selected board is already won or full. If so, find a new board.
-//
-//
-//        // Now that we have a valid board, generate possible moves
-//        Cell[] cells = generatePossibleMoves(board);
-//        int[] possibleMoves = new int[cells.length];
-//        for (int i = 0; i < cells.length; i++) {
-//            possibleMoves[i] = cells[i].getPosition();
-//        }
-//
-//        // Choose the best move from the possible moves
-//        int bestMove = chooseBestMove(game, board, possibleMoves);
-//        return bestMove;
-
         Board board = game.getBoard(nextMoveBoard);
         while (board.isWon() || board.isBoardFull()) {
             nextMoveBoard = this.findPlayableBoard();
@@ -71,10 +54,10 @@ public class AI implements AIInterface {
         return cells;
 
     }
-
+    
     @Override
     public int chooseBestMove(Game game, Board board, int[] possibleMoves) {
-        while (board.isBoardFull()) {
+        while (board.isBoardFull() || board.isWon()) {
             // generate random char between 0 and 8
             Random random = new Random();
             int randomInt = random.nextInt(9);
@@ -87,73 +70,56 @@ public class AI implements AIInterface {
             return possibleMoves[random.nextInt(possibleMoves.length)];
         }
 
-        // check for a horizontal win
-        for(int i = 0; i < 3; i++){
-            int rowStart = i * 3;
+        // array of array of winning moves
+        int[][] winningMoves = new int[][] {
+            {0, 1, 2}, // top row
+            {3, 4, 5}, // middle row
+            {6, 7, 8}, // bottom row
+            {0, 3, 6}, // left column
+            {1, 4, 7}, // middle column
+            {2, 5, 8}, // right column
+            {0, 4, 8}, // top left to bottom right diagonal
+            {2, 4, 6} // top right to bottom left diagonal
+        };
 
-            // check for a board winning move to the left
-            if (playersCells[rowStart] == null &&
-                    playersCells[rowStart + 1] != null && playersCells[rowStart].getSymbol().equals(AI_SYMBOL) &&
-                    playersCells[rowStart + 2] != null && playersCells[rowStart].getSymbol().equals(AI_SYMBOL)) {
-                return possibleMoves[rowStart];
-            }
+        // get cells from AI player
+        Cell[] aiCells = board.getCellsFromPlayer(AI_SYMBOL);
 
-            // check for a board winning move in the middle
-            if (playersCells[rowStart] != null && playersCells[rowStart].getSymbol().equals(AI_SYMBOL) &&
-                    playersCells[rowStart + 1] == null &&
-                    playersCells[rowStart + 2] != null && playersCells[rowStart].getSymbol().equals(AI_SYMBOL)) {
-                return possibleMoves[rowStart + 1];
-            }
+        // loop through AI cells and check if there is a winning move
+        for (int i = 0; i < aiCells.length; i++) {
+            // get the position of the cell
+            int cellPosition = aiCells[i].getPosition();
 
+            // loop through winning moves
+            for (int j = 0; j < winningMoves.length; j++) {
+                // get the winning move
+                int[] winningMove = winningMoves[j];
 
-            // check for a board winning move to the right
-            if (playersCells[rowStart] != null && playersCells[rowStart].getSymbol().equals(AI_SYMBOL) &&
-                    playersCells[rowStart + 1] != null && playersCells[rowStart].getSymbol().equals(AI_SYMBOL) &&
-                    playersCells[rowStart + 2] == null) {
-                return possibleMoves[rowStart + 2];
+                System.out.println(cellPosition);
+
+                // check if the cell position is in the winning move
+                if (cellPosition == winningMove[0] || cellPosition == winningMove[1] || cellPosition == winningMove[2]) {
+                    System.out.println("Found a winning move");
+                    System.out.println(playersCells[winningMove[0]].getSymbol().getClass().getName());
+                    // check if the other two cells in the winning move are empty
+                    if (playersCells[winningMove[0]].getSymbol().equals("null")) {
+                        return winningMove[0];
+                    } else if (playersCells[winningMove[1]].getSymbol().equals("null")) {
+                        return winningMove[1];
+                    } else if (playersCells[winningMove[2]].getSymbol().equals("null")) {
+                        return winningMove[2];
+                    }
+                }
             }
         }
 
-//        // Check for horizontal wins
-//        for (int i = 0; i < 3; i++) {
-//            int rowStart = i * 3;
-//            if (playersCells[rowStart] != null && playersCells[rowStart].getSymbol().equals(AI_SYMBOL) &&
-//                    playersCells[rowStart + 1] != null && playersCells[rowStart + 1].getSymbol().equals(AI_SYMBOL) &&
-//                    playersCells[rowStart + 2] != null && playersCells[rowStart + 2].getSymbol().equals(AI_SYMBOL)) {
-//                return rowStart + 1; // Return the middle cell of the winning row
-//            }
-//        }
-
-        // Check for vertical wins
-//        for (int i = 0; i < 3; i++) {
-//            int colStart = i;
-//            if (playersCells[colStart] != null && playersCells[colStart].getSymbol().equals(AI_SYMBOL) &&
-//                    playersCells[colStart + 3] != null && playersCells[colStart + 3].getSymbol().equals(AI_SYMBOL) &&
-//                    playersCells[colStart + 6] != null && playersCells[colStart + 6].getSymbol().equals(AI_SYMBOL)) {
-//                return colStart + 3; // Return the middle cell of the winning column
-//            }
-//        }
-
-        // Check for diagonal wins
-//        if (playersCells[0] != null && playersCells[0].getSymbol().equals(AI_SYMBOL) &&
-//                playersCells[4] != null && playersCells[4].getSymbol().equals(AI_SYMBOL) &&
-//                playersCells[8] != null && playersCells[8].getSymbol().equals(AI_SYMBOL)) {
-//            return 4; // Return the center cell of the diagonal win
-//        }
-//
-//        if (playersCells[2] != null && playersCells[2].getSymbol().equals(AI_SYMBOL) &&
-//                playersCells[4] != null && playersCells[4].getSymbol().equals(AI_SYMBOL) &&
-//                playersCells[6] != null && playersCells[6].getSymbol().equals(AI_SYMBOL)) {
-//            return 4; // Return the center cell of the diagonal win
-//        }
-
+        System.out.println("No moves found");
 
         // If no winning moves are found, choose a random available move
         Random random = new Random();
         return possibleMoves[random.nextInt(possibleMoves.length)];
 
     }
-
 
     @Override
     public void cleanup() {
