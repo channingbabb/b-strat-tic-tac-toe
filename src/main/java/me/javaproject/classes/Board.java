@@ -52,7 +52,6 @@ public class Board implements BoardInterface {
         return "null"; // if there is no winner found
     }
 
-    // naya just added this
     public boolean isWon() {
         // Implement the logic to check if a winner exists
         String winner = checkWinner();
@@ -132,12 +131,4 @@ public class Board implements BoardInterface {
         return true;
     }
 
-    public boolean isEmpty() {
-        for (CellInterface cell : cells) {
-            if (!cell.isEmpty()) {
-                return false;
-            }
-        }
-        return true;
-    }
 }

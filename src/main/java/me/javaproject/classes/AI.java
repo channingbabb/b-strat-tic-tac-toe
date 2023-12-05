@@ -38,15 +38,6 @@ public class AI implements AIInterface {
         }
         throw new IllegalStateException("No playable boards available");
     }
-    @Override
-    public int evaluateGame() {
-        throw new UnsupportedOperationException("Unimplemented method 'evaluateGame'");
-    }
-
-    @Override
-    public int applyStrategy(int nextMoveBoard) {
-        throw new UnsupportedOperationException("Unimplemented method 'applyStrategy'");
-    }
 
     @Override
     public Cell[] generatePossibleMoves(Board board) {
@@ -119,10 +110,5 @@ public class AI implements AIInterface {
         Random random = new Random();
         return possibleMoves[random.nextInt(possibleMoves.length)];
 
-    }
-
-    @Override
-    public void cleanup() {
-        throw new UnsupportedOperationException("Unimplemented method 'cleanup'");
     }
 }

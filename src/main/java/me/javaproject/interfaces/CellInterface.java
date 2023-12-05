@@ -26,6 +26,4 @@ public interface CellInterface {
 
     int getPosition();
 
-    void setPosition(int position);
-
 }

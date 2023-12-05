@@ -52,12 +52,6 @@ public class Game implements GameInterface {
         }
         return false;
     }
-
-    @Override
-    public String checkBoardWinner(int boardIndex) {
-        return boards[boardIndex].checkWinner();
-    }
-
     @Override
     public String checkOverallWinner() {
         // array of array of winning moves
@@ -84,20 +78,10 @@ public class Game implements GameInterface {
     }
 
     @Override
-    public String[][] getBoardState(int boardIndex) {
-        return new String[][]{boards[boardIndex].getBoardState()};
-    }
-
-    @Override
     public boolean isValidMove(int boardIndex, int cellIndex) {
         return boardIndex >= 0 && boardIndex < 9
                 && !boards[boardIndex].isBoardFull()
                 && boards[boardIndex].isValidMove(cellIndex);
-    }
-
-    @Override
-    public String getCurrentPlayer() {
-        return currentPlayer;
     }
 
     @Override

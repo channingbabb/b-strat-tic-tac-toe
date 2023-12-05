@@ -21,13 +21,6 @@ public interface BoardInterface {
     String checkWinner();
 
     /**
-     * Gets the current state of the board as an array of cell states.
-     *
-     * @return An array of strings representing the current state of each cell on the board.
-     */
-    String[] getBoardState();
-
-    /**
      * Determines if a move is valid on this board.
      *
      * @param cellIndex The index of the cell to check for a valid move.

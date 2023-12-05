@@ -22,10 +22,6 @@ public class Cell implements CellInterface {
         return position;
     }
 
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
     @Override
     public String getSymbol() {
         return symbol;

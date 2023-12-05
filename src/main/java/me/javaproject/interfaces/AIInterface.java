@@ -15,21 +15,6 @@ public interface AIInterface {
     int chooseNextMove(int nextMoveBoard);
 
     /**
-     * Evaluate the current state of the game and provide a recommendation for the next move.
-     *
-     * @return The index of the cell recommended by the AI for the next move.
-     */
-    int evaluateGame();
-
-    /**
-     * Apply a specific strategy to choose the next move on the specified board.
-     *
-     * @param nextMoveBoard The index of the board where the move should be made.
-     * @return The index of the cell where the AI chooses to make its move using the specific strategy.
-     */
-    int applyStrategy(int nextMoveBoard);
-
-    /**
      * Generate a list of possible moves for the AI on the specified board.
      *
      * @param board
@@ -47,8 +32,4 @@ public interface AIInterface {
      */
     int chooseBestMove(Game game, Board board, int[] possibleMoves);
 
-    /**
-     * Perform any necessary cleanup or resource release after the AI's turn.
-     */
-    void cleanup();
 }
